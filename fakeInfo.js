@@ -120,8 +120,8 @@ function randomWords(min, max = 0, defineCases, custom_array = []) {
         break;
       case symbol_case:
         /*
-        * 自定义符号列表
-        */
+         * 自定义符号列表
+         */
         let symbol_arr = [
           ',',
           '.',
@@ -258,27 +258,52 @@ function sendFrom() {
         } else {
           //console.log('返回值相同');
         }
+        showSendTimes();
       }
     }
     xmlHttp.open("post", actionUrl);
     xmlHttp.send(formData);
   }
 }
-
+/** 定时器数组 */
 var allIntervalArray = [];
-/*
-  每秒发送一次数据
-  部分网站发送太频繁会banIP几分钟
-*/
+
+
+/**
+ * 发送次数
+ *
+ */
+function showSendTimes(ele) {
+  var infoDiv = ele || document.getElementById('infoDiv');
+  if (!infoDiv) {
+    var infoDiv = document.createElement('div');
+    infoDiv.setAttribute('id','infoDiv');
+    infoDiv.innerText = 0;
+    infoDiv.style.position='absolute';
+    infoDiv.style.top='5vh';
+    infoDiv.style.right='5px';
+    infoDiv.style.display='table-cell';
+    infoDiv.style.backgroundColor='rgb(170, 170, 170)';
+    infoDiv.style.textAlign='center';
+    infoDiv.style.verticalAlign = 'middle';
+    document.getElementsByTagName('body')[0].appendChild(infoDiv);
+  }
+  infoDiv.innerText++;
+}
+
+/**
+ *
+ * 每秒发送一次数据
+ * 部分网站发送太频繁会banIP几分钟
+ */
 function go() {
   allIntervalArray.push(setInterval(function () {
     setFrom();
     sendFrom();
-    console.log('time'); }, 1000));
-
+  }, 1 * 1000));
 }
 
-/*
+/** 
 停止定时器方法
 */
 function clearAllInterval(allInterval) {
@@ -288,6 +313,7 @@ function clearAllInterval(allInterval) {
 
   }
 }
+
 function stop() {
   clearAllInterval(allIntervalArray);
 }
