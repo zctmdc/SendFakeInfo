@@ -1,12 +1,11 @@
+/**
+ *1.打开钓鱼网网站(测试地址  http://180.215.6.187/f4b6sgz/6cac5s-pc.php)
+ *2.按下F12，在控制台（console）中粘贴以下代码
+ */
 
-// 测试地址  http://180.215.6.187/f4b6sgz/6cac5s-pc.php
 /*
-打开钓鱼网网站，按下F12，在控制台（console）中粘贴以下代码
-*/
-
-/*
-停止定时器方法：
-*/
+ *停止定时器的方法：
+ */
 //stop();
 
 /**
@@ -241,33 +240,45 @@ var responseData;
  *
  */
 function sendFrom() {
+  //所有表单
   var forms = document.getElementsByTagName('form');
   for (let i = 0; i < forms.length; i++) {
+    //当前表单
     var formNow = forms[i];
+    //当前表单中数据
     var formData = new FormData(formNow);
+    //发送地址
     var actionUrl = formNow.getAttribute('action');
     if (!actionUrl) {
       actionUrl = '';
     }
+    //原生JS请求
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function () {
-      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+
+      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) { //发送成功
+        //服务器返回文本
         if (responseData != xmlHttp.responseText) {
           responseData = xmlHttp.responseText;
           console.log(responseData);
         } else {
-          //console.log('返回值相同');
+          //console.log('返回文本相同');
         }
+        //发送成功，记录到网页
         showSendTimes();
+      } else { //发送失败
+        console.log('发送失败');
+        stop();
+        //等待2分钟
+        setTimeout(function () {
+          go();
+        }, 2 * 1000 * 60);
       }
     }
     xmlHttp.open("post", actionUrl);
     xmlHttp.send(formData);
   }
 }
-/** 定时器数组 */
-var allIntervalArray = [];
-
 
 /**
  * 发送次数
@@ -277,19 +288,22 @@ function showSendTimes(ele) {
   var infoDiv = ele || document.getElementById('infoDiv');
   if (!infoDiv) {
     var infoDiv = document.createElement('div');
-    infoDiv.setAttribute('id','infoDiv');
+    infoDiv.setAttribute('id', 'infoDiv');
     infoDiv.innerText = 0;
-    infoDiv.style.position='absolute';
-    infoDiv.style.top='5vh';
-    infoDiv.style.right='5px';
-    infoDiv.style.display='table-cell';
-    infoDiv.style.backgroundColor='rgb(170, 170, 170)';
-    infoDiv.style.textAlign='center';
+    infoDiv.style.position = 'absolute';
+    infoDiv.style.top = '5vh';
+    infoDiv.style.right = '5px';
+    infoDiv.style.display = 'table-cell';
+    infoDiv.style.backgroundColor = 'rgb(170, 170, 170)';
+    infoDiv.style.textAlign = 'center';
     infoDiv.style.verticalAlign = 'middle';
     document.getElementsByTagName('body')[0].appendChild(infoDiv);
   }
   infoDiv.innerText++;
 }
+
+/** 定时器数组 */
+var allIntervalArray = [];
 
 /**
  *
