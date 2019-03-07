@@ -4,6 +4,11 @@
 打开钓鱼网网站，按下F12，在控制台（console）中粘贴以下代码
 */
 
+/*
+停止定时器方法：
+*/
+//stop();
+
 /**
  *
  *
@@ -208,7 +213,6 @@ function fakePassWord() {
   return fakePasswd;
 }
 
-
 /**
  * 填充表单
  *
@@ -219,6 +223,10 @@ function setFrom() {
     const ele = formArray[index];
     if (!(ele.style.display == 'none')) {
       if (ele.getAttribute('type') && ele.getAttribute('type').indexOf('password') != -1) {
+        ele.setAttribute('data-isPass', true);
+        ele.setAttribute('type', 'text');
+      }
+      if (ele.getAttribute('data-isPass')) {
         ele.value = fakePassWord();
       } else {
         ele.value = fakeUserName();
@@ -226,7 +234,8 @@ function setFrom() {
     }
   }
 }
-
+/** 服务器返回的数据  */
+var responseData;
 /**
  *向服务器提交数据
  *
@@ -243,7 +252,12 @@ function sendFrom() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function () {
       if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-        console.log(xmlHttp.responseText);
+        if (responseData != xmlHttp.responseText) {
+          responseData = xmlHttp.responseText;
+          console.log(responseData);
+        } else {
+          //console.log('返回值相同');
+        }
       }
     }
     xmlHttp.open("post", actionUrl);
@@ -251,12 +265,37 @@ function sendFrom() {
   }
 }
 
+var allIntervalArray = [];
+/*
+  每秒发送一次数据
+  部分网站发送太频繁会banIP几分钟
+*/
+function go() {
+  allIntervalArray.push(setInterval(function () {
+    setFrom();
+    sendFrom();
+    console.log('time'); }, 1000));
+
+}
 
 /*
-每秒发送一次数据
+停止定时器方法
 */
-setInterval(function () { 
-  setFrom();
-  sendFrom();
-}, 1000);
- 
+function clearAllInterval(allInterval) {
+  let array = allInterval || allIntervalArray;
+  for (let index = 0; index < array.length; index++) {
+    clearInterval(array[index]);
+
+  }
+}
+function stop() {
+  clearAllInterval(allIntervalArray);
+}
+/*
+停止定时器
+*/
+//clearAllInterval(allIntervalArray);
+/*
+开始表演
+*/
+go();
