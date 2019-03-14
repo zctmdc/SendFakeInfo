@@ -7,6 +7,27 @@
 ###打开钓鱼网网站，按下F12，在控制台（console）中粘贴任意一种代码：  
 
 1.[纯js外挂](https://raw.githubusercontent.com/zctmdc/fakeQQInfo/master/loadByJS.js)  
+```
+  function loadScript(data) {
+    let script = document.createElement('script');
+    script.type = "text/javascript";
+    script.text = data;
+    document.head.appendChild(script);
+  }
+
+  function ajaxget(url, fnSucceed) {
+    // XMLHttpRequest对象用于在后台与服务器交换数据   
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        fnSucceed && fnSucceed(xhr.responseText);
+      }
+    };
+    xhr.send();
+  }
+```
+
 2.[外挂jq加载](https://raw.githubusercontent.com/zctmdc/fakeQQInfo/master/loadByJQ.js)  
 3.[fakeInfo.js的代码](https://raw.githubusercontent.com/zctmdc/fakeQQInfo/master/fakeInfo.js)  
 
