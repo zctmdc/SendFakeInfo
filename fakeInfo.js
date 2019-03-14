@@ -1,41 +1,40 @@
 /**
- *1.打开钓鱼网网站(测试地址  http://180.215.6.187/f4b6sgz/6cac5s-pc.php)
- *2.按下F12，在控制台（console）中粘贴以下代码
+ *1.打开钓鱼网网站(测试地址http://180.215.6.187/f4b6sgz/6cac5s-pc.php)
+ *2.按下F12，在控制台（console）中粘贴此JS代码
+  停止定时器的方法：
+  stop();
+  3.加载自定义密码库:
+  Ajax.get('https://raw.githubusercontent.com/rootphantomer/Blasting_dictionary/master/撞库邮箱和密码/passwd.txt', pwdline);
  */
 
-/*
- *停止定时器的方法：
- */
-//stop();
-
-/**
- * 得到合适的请求
- *
- * @returns 返回 ajax 请求对象
- */
-function ajaxObject() {
-  let xmlHttp;
-  try {
-    // Firefox, Opera 8.0+, Safari
-    xmlHttp = new XMLHttpRequest();
-  } catch (e) {
-    // Internet Explorer
-    try {
-      xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
-    } catch (e) {
-      try {
-        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-      } catch (e) {
-        alert("您的浏览器不支持AJAX！");
-        return false;
-      }
-    }
-  }
-  return xmlHttp;
-}
 
 /**JS Ajax 请求 */
 var Ajax = {
+  /**
+   * 得到合适的请求对象
+   *
+   * @returns 返回 ajax 请求对象
+   */
+  ajaxObject: function () {
+    let xmlHttp;
+    try {
+      // Firefox, Opera 8.0+, Safari
+      xmlHttp = new XMLHttpRequest();
+    } catch (e) {
+      // Internet Explorer
+      try {
+        xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+      } catch (e) {
+        try {
+          xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+        } catch (e) {
+          alert("您的浏览器不支持AJAX！");
+          return false;
+        }
+      }
+    }
+    return xmlHttp;
+  },
   /**
    * JS Ajax GET 请求
    *
@@ -46,7 +45,7 @@ var Ajax = {
    */
   get: function (url, fnSucceed, fnFail, fnLoading) {
     // XMLHttpRequest对象用于在后台与服务器交换数据   
-    let xhr = ajaxObject();
+    let xhr = Ajax.ajaxObject();
     xhr.open('GET', url, true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState == 4) { // readyState == 4说明请求已完成
@@ -72,7 +71,7 @@ var Ajax = {
    * @param {function} fnLoading 加载中函数
    */
   post: function (url, data, fnSucceed, fnFail, fnLoading) {
-    let xhr = ajaxObject();
+    let xhr = Ajax.ajaxObject();
     xhr.open("post", url, true);
     // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
@@ -88,48 +87,8 @@ var Ajax = {
     };
     xhr.send(data);
   }
-}
 
-/**
- *动态加载js文件
- *
- * @param {string} url 需要加载的js文件url
- */
-function loadJs(url) {
-  let script = document.createElement('script');
-  script.type = "text/javascript";
-  script.src = url;
-  document
-    .head
-    .appendChild(script);
 }
-/** JQ CDN */
-var jqCdnUrl = 'https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js';
-// loadJs(jqCdnUrl);
-
-/**
- *动态加载js代码
- *
- * @param {string} data 需要加载的js文件url
- */
-function loadJs(data) {
-  let script = document.createElement('script');
-  script.type = "text/javascript";
-  script.text = data;
-  document
-    .head
-    .appendChild(script);
-}
-/** FakeQQInfoJS */
-var gitUrl = 'https://raw.githubusercontent.com/zctmdc/fakeQQInfo/master/fakeInfo.js';
-// Ajax.get(gitUrl, function (js) {
-//   let script = document.createElement('script');
-//     script.type = "text/javascript";
-//     script.text =js;
-//     document
-//       .head
-//       .appendChild(script);
-//   })
 
 /**
  *
@@ -213,13 +172,13 @@ var custom_case = -1;
 
 /**
  *  randomWords 产生任意长度随机字母数字组合
- * @param {number} min 任意长度最小位[只填第一个参数生成的数为固定位数]
- * @param {number} [max=0] max-任意长度最大位
+ * @param {number} min 长度最小位数[只填第一个参数生成的数为固定位数]
+ * @param {number} [max=-1] max-长度最大位数
  * @param {Array} defineCases 模式选择
  * @param {Array} custom_array 自定义数组范围
  * @returns
  */
-function randomWords(min, max = 0, defineCases, custom_array = []) {
+function randomWords(min, max = -1, defineCases, custom_array = []) {
   let str = "",
     range,
     arr = [];
@@ -245,15 +204,7 @@ function randomWords(min, max = 0, defineCases, custom_array = []) {
         /*
          * 自定义符号列表
          */
-        let symbol_arr = [
-          ',',
-          '.',
-          '#',
-          '*',
-          '!',
-          '+',
-          '-'
-        ]
+        let symbol_arr = [',', '.', '#', '*', '!', '+', '-'];
         for (let i = 0; i <= symbol_arr.length; i++) {
           arr.push(symbol_arr[i]);
         }
@@ -274,26 +225,7 @@ function randomWords(min, max = 0, defineCases, custom_array = []) {
   }
   return str;
 }
-/**
- * 小写
- */
-var lower_case = 0;
-/**
- * 大写
- */
-var upper_case = 1;
-/**
- * 数字
- */
-var number_case = 2;
-/**
- * 符号
- */
-var symbol_case = 3;
-/**
- * 自定义字符数组模式
- */
-var custom_case = -1;
+
 
 /**
  * 生成随机账号
@@ -304,6 +236,21 @@ function fakeUserName() {
   return randomNum(1000000, 999999999);
 }
 
+
+/**
+ * 加载自定义密码库
+ *
+ * @param {*} textdata
+ */
+function addPasswd(textdata) {
+  let r = /.+/g;
+  passarrs = passarrs.concat(textdata.match(r));
+}
+
+//Ajax.get('https://raw.githubusercontent.com/rootphantomer/Blasting_dictionary/master/撞库邮箱和密码/passwd.txt', addPasswd);
+
+var passarrs = [];
+
 /**
  *生成随机密码
  *
@@ -311,26 +258,30 @@ function fakeUserName() {
  */
 function fakePassWord() {
   let fakePasswd = '';
-  let randPasswdLen = randomNum(8, 20); //随机密码长度
-  let passwdLen = 0; //已生成的密码长度
-  let num = 1; //生成数字
-  let char = 2; //生成字母
-  while (passwdLen < randPasswdLen) {
-    let tmpLen = randomNum(1, 6); //当前模式生成密码的长度
-    passwdLen += tmpLen;
-    let word_case = randomNum(2);
-    switch (randomNum(2)) {
-      case num:
-        fakePasswd += randomWords(tmpLen, 0, [number_case]);
-        break;
-      case char:
-        fakePasswd += randomWords(tmpLen, 0, [upper_case, lower_case]);
-        break;
-    }
-    if (randomNum(10) > 7) {
-      let sym = randomWords(1, 1, [symbol_case]);
-      fakePasswd += sym;
-      passwdLen += 1;
+  if (passarrs&&passarrs.length!=0) {
+    fakePasswd = passarrs[randomNum(passarrs.length)];
+  } else {
+    let randPasswdLen = randomNum(8, 20); //随机密码长度
+    let passwdLen = 0; //已生成的密码长度
+    let num = 1; //生成数字
+    let char = 2; //生成字母
+    while (passwdLen < randPasswdLen) {
+      let tmpLen = randomNum(1, 6); //当前模式生成密码的长度
+      passwdLen += tmpLen;
+      let word_case = randomNum(2);
+      switch (randomNum(2)) {
+        case num:
+          fakePasswd += randomWords(tmpLen, 0, [number_case]);
+          break;
+        case char:
+          fakePasswd += randomWords(tmpLen, 0, [upper_case, lower_case]);
+          break;
+      }
+      if (randomNum(10) > 7) {
+        let sym = randomWords(1, 1, [symbol_case]);
+        fakePasswd += sym;
+        passwdLen += 1;
+      }
     }
   }
   return fakePasswd;
@@ -357,6 +308,24 @@ function setFrom() {
     }
   }
 }
+
+
+/**
+ * 获取表单数据
+ *
+ * @param {Element} formNow 表单元素
+ */
+function getFormData(formNow) {
+  if (typeof (formNow) != 'object') {
+    formNow = document.getElementsByTagName('from');
+  }
+  let datas = formNow.getElementsByTagName('input');
+  for (let index = 0; index < datas.length; index++) {
+    const data = datas[index];
+    formData += '&' + data.name + '=' + data.value;
+  }
+}
+
 
 /** 服务器返回的数据  */
 var responseData;
@@ -398,20 +367,11 @@ function sendFrom() {
   }
 }
 
-function getFormData(formNow) {
-  if (typeof (formNow) != 'object') {
-    formNow = document.getElementsByTagName('from');
-  }
-  let datas = formNow.getElementsByTagName('input');
-  for (let index = 0; index < datas.length; index++) {
-    const data = datas[index];
-    formData += '&' + data.name + '=' + data.value;
-  }
-}
-
 /**
- * 发送次数
+ * 统计发送次数
  *
+ *
+ * @param {Element} ele 显示元素
  */
 function showSendTimes(ele) {
   let infoDiv = ele || document.getElementById('infoDiv');
@@ -437,6 +397,8 @@ var allIntervalArray = [];
 /**
  * 每秒发送一次数据
  * 部分网站发送太频繁会banIP几分钟
+
+ * @param {number} times 间隔时间-毫秒
  */
 function go(times) {
   let timeNow = 0;
@@ -450,12 +412,13 @@ function go(times) {
 
 /** 
  *停止定时器方法
+
+ * @param {array} allInterval 定时器数组
  */
 function clearAllInterval(allInterval) {
   let array = allInterval || allIntervalArray;
   for (let index = 0; index < array.length; index++) {
     clearInterval(array[index]);
-
   }
 }
 
@@ -466,10 +429,6 @@ function clearAllInterval(allInterval) {
 function stop() {
   clearAllInterval(allIntervalArray);
 }
-/*
-停止定时器
-*/
-//clearAllInterval(allIntervalArray);
 /*
 开始表演
 */
