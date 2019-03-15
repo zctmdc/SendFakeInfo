@@ -14,8 +14,7 @@
     script.text = data;
     document.head.appendChild(script);
   }
-  function ajaxget(url, fnSucceed) {
-    // XMLHttpRequest对象用于在后台与服务器交换数据   
+  function ajaxget(url, fnSucceed) {   
     let xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
     xhr.onreadystatechange = function () {
